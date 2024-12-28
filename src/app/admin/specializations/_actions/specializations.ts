@@ -5,7 +5,10 @@ import { redirect } from 'next/navigation';
 import db from '@/db/db';
 import { specializationSchema } from '@/models/specialization';
 
-export async function addSpecialization(formData: FormData) {
+export async function addSpecialization(
+  prevState: unknown,
+  formData: FormData,
+) {
   const parsedSpecializationData = specializationSchema.safeParse(
     Object.fromEntries(formData.entries()),
   );
