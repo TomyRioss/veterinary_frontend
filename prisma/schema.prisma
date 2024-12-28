@@ -13,6 +13,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id          String       @id @default(uuid())
+  email       String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt @default(now())
+
+  Order Order[]
+}
+
+model Order {
+  id          String          @id @default(uuid())
+  userId      String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt @default(now())
+
+  User        User           @relation(fields: [userId], references: [id])
+  OrderDetails OrderDetail[]
+}
+
+model OrderDetail {
+  id          String          @id @default(uuid())
+  pricePaidInCents  Int
+  quantity          Int
+  productId   String
+  orderId     String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt @default(now())
+
+  Product     Product        @relation(fields: [productId], references: [id])
+  Order       Order          @relation(fields: [orderId], references: [id])
+}
+
 model ProductCategory {
   id              Int         @id @default(autoincrement())
   productId       Int
@@ -47,11 +79,12 @@ model Brand {
 }
 
 model Product {
-  id                    Int              @id @default(autoincrement())
+  id                    String              @id @default(uuid())
   subcategoryId         Int
-  price                 Float
+  priceInCents          Int
   brandId               Int
-  stock                 Int              @default(0)  
+  stock                 Int              @default(0)
+  isAvailableForPurchase  Boolean          @default(true)
   organizationId        Int
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt @default(now())
@@ -59,6 +92,7 @@ model Product {
   Subcategory           Subcategory               @relation(fields: [subcategoryId], references: [id])
   VariationValues       ProductVariationValue[]
   Brand                 Brand                     @relation(fields: [brandId], references: [id])
+  OrderDetail           OrderDetail[]
 }
 
 model Attribute {
@@ -81,7 +115,7 @@ model AttributeValue {
 model ProductVariationValue {
   id                Int             @id @default(autoincrement())
   product           Product         @relation(fields: [productId], references: [id])
-  productId         Int
+  productId         String
   attributeValue    AttributeValue  @relation(fields: [attributeValueId], references: [id])
   attributeValueId  Int
 }

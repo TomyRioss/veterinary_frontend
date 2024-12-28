@@ -8,20 +8,16 @@ import {
 
 type DashboardCardProps = {
   title: string;
-  description: string;
+  subtitle: string;
   body: string;
 };
 
-export function DashboardCard({
-  title,
-  description,
-  body,
-}: DashboardCardProps) {
+export function DashboardCard({ title, subtitle, body }: DashboardCardProps) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription>{subtitle}</CardDescription>
       </CardHeader>
       <CardContent>{body}</CardContent>
     </Card>

@@ -1,5 +1,8 @@
 'use server';
 
+import { redirect } from 'next/navigation';
+
+import db from '@/db/db';
 import { specializationSchema } from '@/models/specialization';
 
 export async function addSpecialization(formData: FormData) {
@@ -11,5 +14,12 @@ export async function addSpecialization(formData: FormData) {
   if (!parsedSpecializationData.success) {
     return parsedSpecializationData.error.formErrors.fieldErrors;
   }
-  const specializationData = parsedSpecializationData.data;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { id, ...specializationData } = parsedSpecializationData.data;
+
+  await db.specialization.create({
+    data: specializationData,
+  });
+
+  redirect('/admin/specializations');
 }

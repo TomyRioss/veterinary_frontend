@@ -1,6 +1,6 @@
 import { addSpecialization } from '../_actions/specializations';
+import { SubmitButton } from './SubmitButton';
 
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
@@ -11,7 +11,7 @@ export function SpecializationsForm() {
         <Label htmlFor="name">Name</Label>
         <Input type="text" id="name" name="name" required />
       </div>
-      <Button>Submit</Button>
+      <SubmitButton />
     </form>
   );
 }
