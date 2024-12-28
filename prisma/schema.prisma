@@ -1,0 +1,293 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ProductCategory {
+  id              Int         @id @default(autoincrement())
+  productId       Int
+  categoryId      Int
+
+  Subcategory Subcategory     @relation(fields: [productId], references: [id])
+  Category    Category        @relation(fields: [categoryId], references: [id])
+
+  @@unique([productId, categoryId])
+}
+
+model Subcategory {
+  id                    Int                      @id @default(autoincrement())
+  name                  String                   
+  organizationId        Int
+  createdAt             DateTime                 @default(now())
+  updatedAt             DateTime                 @updatedAt @default(now())
+
+  Categories            ProductCategory[]
+  Product               Product[]
+}
+
+model Brand {
+  id              Int       @id @default(autoincrement())
+  name            String    
+  description     String?
+  organizationId  Int       @default(1)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt @default(now())
+
+  Products        Product[] // One-to-many relationship with products
+}
+
+model Product {
+  id                    Int              @id @default(autoincrement())
+  subcategoryId         Int
+  price                 Float
+  brandId               Int
+  stock                 Int              @default(0)  
+  organizationId        Int
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt @default(now())
+
+  Subcategory           Subcategory               @relation(fields: [subcategoryId], references: [id])
+  VariationValues       ProductVariationValue[]
+  Brand                 Brand                     @relation(fields: [brandId], references: [id])
+}
+
+model Attribute {
+  id                    Int                      @id @default(autoincrement())
+  name                  String                   
+  organizationId        Int
+
+  Values                AttributeValue[]
+}
+
+model AttributeValue {
+  id          Int       @id @default(autoincrement())
+  value       String
+  attribute   Attribute @relation(fields: [attributeId], references: [id])
+  attributeId Int
+
+  ProductVariationValue ProductVariationValue[]
+}
+
+model ProductVariationValue {
+  id                Int             @id @default(autoincrement())
+  product           Product         @relation(fields: [productId], references: [id])
+  productId         Int
+  attributeValue    AttributeValue  @relation(fields: [attributeValueId], references: [id])
+  attributeValueId  Int
+}
+
+model Category {
+  id                    Int       @id @default(autoincrement())
+  name                  String    
+  description           String?
+  organizationId        Int
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt @default(now())
+
+  Products    ProductCategory[]
+}
+
+model Owner {
+  id          Int       @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String    @unique
+  phone       String
+  address     String?
+  animals     Animal[]  // One owner can have many animals
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now())
+}
+
+model Species {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  Breeds      Breed[]      // One species can have many breeds
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt @default(now())
+}
+
+model Breed {
+  id          Int       @id @default(autoincrement())
+  name        String    // e.g., "Retriever", "Persian", "Parrot"
+  speciesId   Int       // Foreign key to Species
+  species     Species   @relation(fields: [speciesId], references: [id])
+  animals     Animal[]  // One type can have many animals
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now())
+}
+
+model Specialization {
+  id          Int            @id @default(autoincrement())
+  name        String         @unique // e.g., "Surgery", "Dermatology", "General Practice"
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now())
+  
+  Veterinarians VeterinarianSpecialization[]
+}
+
+model Veterinarian {
+  id          Int                   @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String                @unique
+  phone       String
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt @default(now())
+
+  MedControl      MedControl[]
+  Appointments    Appointment[]
+  MedicalHistory  MedicalHistory[]
+  Hospitalization Hospitalization[]
+  Specializations VeterinarianSpecialization[]
+}
+
+model VeterinarianSpecialization {
+  veterinarianId    Int
+  specializationId  Int
+  assignedAt        DateTime @default(now())
+
+  Veterinarian      Veterinarian @relation(fields: [veterinarianId], references: [id])
+  Specialization    Specialization @relation(fields: [specializationId], references: [id])
+
+  @@id([veterinarianId, specializationId]) // Composite key to prevent duplicates
+}
+
+model Animal {
+  id          Int        @id @default(autoincrement())
+  name        String
+  breedId     Int?       // Optional foreign key to SpeciesType
+  age         Int?
+  weight      Float?
+  ownerId     Int        // Foreign key to Owner
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt @default(now())
+
+  Breed       Breed?     @relation(fields: [breedId], references: [id])
+  Owner       Owner      @relation(fields: [ownerId], references: [id])
+  Appointments Appointment[]
+  MedicalHistory MedicalHistory[]
+  Hospitalizations Hospitalization[]
+}
+
+model Appointment {
+  id            Int           @id @default(autoincrement())
+  date          DateTime
+  reason        String
+  notes         String?
+  animalId      Int           // Foreign key to Animal
+  veterinarianId Int          // Foreign key to Veterinarian
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt @default(now())
+  
+  Animal          Animal        @relation(fields: [animalId], references: [id])
+  Veterinarian    Veterinarian  @relation(fields: [veterinarianId], references: [id])
+  MedicalHistory  MedicalHistory[]
+  MedControls     MedControl[]
+}
+
+model FeedControl {
+  id                    Int               @id @default(autoincrement())
+  hospitalizationId     Int               // Foreign key to Hospitalization
+  Hospitalization       Hospitalization   @relation(fields: [hospitalizationId], references: [id])
+  feedType              String            // e.g., "Dry Food", "Wet Food", "Pellets"
+  quantity              Float             // Quantity of the feed given
+  feedTime              DateTime          // Timestamp for the feeding time
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+}
+
+model MedControl {
+  id          Int        @id @default(autoincrement())
+  medicationId Int       // Foreign key to Medication
+  quantity    Float      // Quantity of the medication administered
+  dosageTime  DateTime   // Timestamp of when the medication was given
+  status      String     // Status could be "Administered", "Missed", "Delayed"
+  veterinarianId  Int?    // Optional foreign key to Veterinarian
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  medication  Medication @relation(fields: [medicationId], references: [id])
+  Veterinarian    Veterinarian?  @relation(fields: [veterinarianId], references: [id]) // Relation to MedControl for tracking medication usage
+  Hospitalization Hospitalization[]
+  Appointment Appointment[]
+}
+
+model MedicalHistory {
+  id              Int           @id @default(autoincrement())
+  animalId        Int           // Foreign key to Animal
+  animal          Animal        @relation(fields: [animalId], references: [id])
+  appointmentId   Int?          // Optional foreign key to Appointment
+  appointment     Appointment?  @relation(fields: [appointmentId], references: [id])
+  medicationId    Int?          // Optional foreign key to Medication
+  medication      Medication?   @relation(fields: [medicationId], references: [id])
+  diagnosis       String?       // Diagnosis or reason for the medical event
+  treatment       String?       // Treatment provided (e.g., surgery, vaccination)
+  notes           String?       // Additional notes about the treatment or event
+  veterinarianId  Int?          // Optional foreign key to Veterinarian
+  veterinarian    Veterinarian? @relation(fields: [veterinarianId], references: [id])
+  date            DateTime      // Date of the medical event
+  createdAt       DateTime      @default(now()) // Record creation timestamp
+  updatedAt       DateTime      @updatedAt       // Last update timestamp
+}
+
+model Medication {
+  id          Int        @id @default(autoincrement())
+  name        String     
+  type        String     
+  dosage      Int        
+  unitId      Int
+  expiryDate  DateTime?
+  sideEffects String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  Unit                      Unit                    @relation(fields: [unitId], references: [id])
+  MedControl                MedControl[]
+  MedicalHistory            MedicalHistory[]
+  MedicationCategories      MedicationCategory[]    @relation("MedicationCategories")
+}
+
+model MedicationCategory {
+  id              Int           @id @default(autoincrement())
+  name            String        // Name of the category (e.g., "Antibiotic", "Vaccine")
+  
+  Medications     Medication[]  @relation("MedicationCategories")
+}
+
+model Unit {
+  id        Int        @id @default(autoincrement())
+  name      String     // Name of the unit (e.g., "mg", "mL", "tablet")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  Medications Medication[] // Relation to medications that use this unit
+}
+
+model Hospitalization {
+  id              Int           @id @default(autoincrement())
+  animalId        Int           // Foreign key to Animal
+  veterinarianId  Int           // Optional foreign key to Veterinarian (could be the attending vet)
+  admissionDate   DateTime      // Date when the animal was admitted
+  dischargeDate   DateTime?     // Date when the animal was discharged (nullable for ongoing stays)
+  reason          String        // Reason for hospitalization (e.g., "Surgery", "Observation")
+  status          String        // Status of the stay (e.g., "In Progress", "Discharged")
+  notes           String?       // Additional notes (e.g., special care instructions)
+  createdAt       DateTime      @default(now()) // Record creation timestamp
+  updatedAt       DateTime      @updatedAt       // Last update timestamp
+
+  Animal          Animal        @relation(fields: [animalId], references: [id])
+  Veterinarian    Veterinarian @relation(fields: [veterinarianId], references: [id])
+  FeedControl     FeedControl[]
+  MedControl      MedControl[]
+}
