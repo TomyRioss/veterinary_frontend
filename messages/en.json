@@ -1,0 +1,10 @@
+{
+  "Navigation": {
+    "Home": "Home",
+    "Turnos": "Shifts",
+    "Horarios": "Schedules",
+    "Productos": "Products",
+    "Servicios": "Services",
+    "Contacto": "Contact"
+  }
+}

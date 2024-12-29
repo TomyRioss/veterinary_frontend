@@ -1,0 +1,10 @@
+{
+  "Navigation": {
+    "Home": "Home",
+    "Turnos": "Turnos",
+    "Horarios": "Horarios",
+    "Productos": "Productos",
+    "Servicios": "Servicios",
+    "Contacto": "Contacto"
+  }
+}
