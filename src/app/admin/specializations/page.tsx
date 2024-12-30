@@ -1,5 +1,5 @@
+import { DataTable } from '../_components/Datatable';
 import { AdminIndexPage } from '../_components/Index';
-import { DataTable } from './_components/Datatable';
 import { columns } from './columns';
 
 import db from '@/db/db';

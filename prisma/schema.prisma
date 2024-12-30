@@ -123,7 +123,7 @@ model Category {
   id                    Int       @id @default(autoincrement())
   name                  String    
   description           String?
-  organizationId        Int
+  organizationId        Int       @default(1)
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt @default(now())
 

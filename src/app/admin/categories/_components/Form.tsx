@@ -17,10 +17,19 @@ export function SpecializationsForm() {
   const [error, action] = useActionState(create, {});
   return (
     <form action={action} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
-        <Input type="text" id="name" name="name" />
-        {error.name && <p className="text-destructive">{error.name}</p>}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="name">Name</Label>
+          <Input type="text" id="name" name="name" />
+          {error.name && <p className="text-destructive">{error.name}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="description">Description</Label>
+          <Input type="text" id="description" name="description" />
+          {error.description && (
+            <p className="text-destructive">{error.description}</p>
+          )}
+        </div>
       </div>
       <div className="flex items-center justify-end space-x-4">
         <Button variant={'secondary'} asChild>

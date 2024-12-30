@@ -6,9 +6,9 @@ import db from '@/db/db';
 
 export async function create(prevState: unknown, formData: FormData) {
   return createEntity({
-    schema: (await import('@/models/brand')).brandSchema,
+    schema: (await import('@/models/category')).categorySchema,
     formData,
-    dbCreate: (data) => db.brand.create({ data }),
-    redirectUrl: '/admin/brands',
+    dbCreate: (data) => db.category.create({ data }),
+    redirectUrl: '/admin/categories',
   });
 }

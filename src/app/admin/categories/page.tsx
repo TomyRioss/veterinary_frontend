@@ -5,10 +5,11 @@ import { columns } from './columns';
 import db from '@/db/db';
 
 async function getData() {
-  const data = await db.brand.findMany({
+  const data = await db.category.findMany({
     select: {
       id: true,
       name: true,
+      description: true,
     },
     orderBy: {
       updatedAt: 'desc',
@@ -18,13 +19,13 @@ async function getData() {
   return data;
 }
 
-export default async function AdminBrandsIndex() {
+export default async function AdminSpecializationsIndex() {
   const data = await getData();
   return (
     <AdminIndexPage
-      title="Brands"
-      newItemHref="/admin/brands/details"
-      newItemLabel="New Brand"
+      title="Categories"
+      newItemHref="/admin/categories/details"
+      newItemLabel="New Category"
       DataTableComponent={<DataTable columns={columns} data={data} />}
     />
   );

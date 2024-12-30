@@ -6,8 +6,8 @@ import Link from 'next/link';
 
 import { X } from 'lucide-react';
 
+import { SubmitButton } from '../../_components/SubmitButton';
 import { create } from '../_actions/create';
-import { SubmitButton } from './SubmitButton';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

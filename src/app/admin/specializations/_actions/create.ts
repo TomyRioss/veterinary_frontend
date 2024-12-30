@@ -1,22 +1,14 @@
 'use server';
 
-import { redirect } from 'next/navigation';
+import { createEntity } from '../../_server_actions_utils/createEntity';
 
 import db from '@/db/db';
-import { specializationSchema } from '@/models/specialization';
 
 export async function create(prevState: unknown, formData: FormData) {
-  const parsedData = specializationSchema.safeParse(
-    Object.fromEntries(formData.entries()),
-  );
-
-  if (!parsedData.success) {
-    return parsedData.error.formErrors.fieldErrors;
-  }
-
-  await db.specialization.create({
-    data: parsedData.data,
+  return createEntity({
+    schema: (await import('@/models/specialization')).specializationSchema,
+    formData,
+    dbCreate: (data) => db.specialization.create({ data }),
+    redirectUrl: '/admin/specializations',
   });
-
-  redirect('/admin/specializations');
 }
