@@ -1,28 +1,29 @@
 //* Lógica para el navbar.
+import { Menu } from '@/types/menus';
 
-export const menu: { name: string; path: string }[] = [
+export const menusList: Menu[] = [
   {
     name: 'Home',
     path: '/',
   },
   {
     name: 'Turnos',
-    path: '/shifts',
+    path: '/turnos',
   },
   {
     name: 'Horarios',
-    path: '/schedules',
+    path: '/horarios',
   },
   {
     name: 'Productos',
-    path: '/products',
+    path: '/productos',
   },
   {
     name: 'Servicios',
-    path: '/services',
+    path: '/servicios',
   },
   {
     name: 'Contacto',
-    path: '/contact',
+    path: '/contacto',
   },
 ];
