@@ -1,14 +1,10 @@
-import Link from 'next/link';
-
-import { PlusCircle } from 'lucide-react';
-
+import { AdminIndexPage } from '../_components/Index';
 import { DataTable } from './_components/Datatable';
 import { columns } from './columns';
 
-import { Button } from '@/components/ui/button';
 import db from '@/db/db';
 
-async function getSpecializations() {
+async function getData() {
   const specializationsData = await db.specialization.findMany({
     select: {
       id: true,
@@ -40,19 +36,13 @@ async function getSpecializations() {
 }
 
 export default async function AdminSpecializationsIndex() {
-  const data = await getSpecializations();
+  const data = await getData();
   return (
-    <main className="container mx-auto py-10">
-      <div className="flex justify-between items-center gap-4 mb-8">
-        <h1 className="text-2xl font-semibold">Specializations</h1>
-        <Button asChild>
-          <Link href="/admin/specializations/details">
-            <PlusCircle />
-            New Specialization
-          </Link>
-        </Button>
-      </div>
-      <DataTable columns={columns} data={data} />
-    </main>
+    <AdminIndexPage
+      title="Specializations"
+      newItemHref="/admin/specializations/details"
+      newItemLabel="New Specialization"
+      DataTableComponent={<DataTable columns={columns} data={data} />}
+    />
   );
 }

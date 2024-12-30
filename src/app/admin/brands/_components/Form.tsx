@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { X } from 'lucide-react';
 
-import { addSpecialization } from '../_actions/specializations';
+import { create } from '../_actions/create';
 import { SubmitButton } from './SubmitButton';
 
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 export function SpecializationsForm() {
-  const [error, action] = useActionState(addSpecialization, {});
+  const [error, action] = useActionState(create, {});
   return (
     <form action={action} className="space-y-4">
       <div className="space-y-2">
@@ -24,7 +24,7 @@ export function SpecializationsForm() {
       </div>
       <div className="flex items-center justify-end space-x-4">
         <Button variant={'secondary'} asChild>
-          <Link href="/admin/specializations">
+          <Link href="/admin/brands">
             <X />
             Cancel
           </Link>
