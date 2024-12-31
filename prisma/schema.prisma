@@ -59,8 +59,8 @@ model ProductCategory {
 model Subcategory {
   id                    Int                      @id @default(autoincrement())
   name                  String                   
-  organizationId        Int
-  createdAt             DateTime                 @default(now())
+  organizationId        Int                      @default(1)
+  createdAt             DateTime                 @default(now())  
   updatedAt             DateTime                 @updatedAt @default(now())
 
   Categories            ProductCategory[]
@@ -145,9 +145,10 @@ model Owner {
 model Species {
   id          Int          @id @default(autoincrement())
   name        String       @unique
-  Breeds      Breed[]      // One species can have many breeds
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt @default(now())
+  
+  Breeds      Breed[]      // One species can have many breeds
 }
 
 model Breed {
