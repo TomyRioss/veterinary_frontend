@@ -4,7 +4,7 @@ import { columns } from './columns';
 
 import db from '@/db/db';
 
-async function getData() {
+export async function getData() {
   const data = await db.category.findMany({
     select: {
       id: true,

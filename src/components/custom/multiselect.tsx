@@ -8,7 +8,7 @@ import { Command, CommandGroup, CommandItem } from '@/components/ui/command';
 
 export type Option = {
   label: string;
-  value: number;
+  value: number | string;
 };
 
 type MultiSelectProps = {

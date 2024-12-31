@@ -4,11 +4,14 @@ import { Form } from '../../_components/Form';
 import { create } from '../_actions/create';
 import { FormInputs } from './FormInputs';
 
-export function SubcategoriesForm() {
+import { Option } from '@/components/custom/multiselect';
+import { subcategorySchema } from '@/models/subcategory';
+
+export function SubcategoriesForm(props: { categories: Option[] }) {
   return (
-    <Form
+    <Form<typeof subcategorySchema>
       cancelHref="/admin/subcategories"
-      FormInputs={FormInputs}
+      FormInputs={(props) => <FormInputs {...props} categories={[]} />}
       create={create}
     />
   );
