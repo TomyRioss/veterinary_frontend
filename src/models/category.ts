@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const categorySchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  description: z.string(),
+  description: z.string().optional(),
 });
 
 // export const createCategorySchema = z.object({

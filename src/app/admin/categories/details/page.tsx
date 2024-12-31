@@ -1,5 +1,5 @@
-import { SpecializationsForm } from '../_components/Form';
+import { CategoriesForm } from '../_components/Form';
 
 export default function Details() {
-  return <SpecializationsForm />;
+  return <CategoriesForm />;
 }

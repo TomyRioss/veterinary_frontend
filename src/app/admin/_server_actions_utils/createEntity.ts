@@ -26,7 +26,7 @@ export async function createEntity({
   redirectUrl,
 }: EntityCreateArgs) {
   const parsedData = schema.safeParse(Object.fromEntries(formData.entries()));
-
+  console.log(parsedData);
   if (!parsedData.success) {
     return parsedData.error.formErrors.fieldErrors;
   }
