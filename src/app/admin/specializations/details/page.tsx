@@ -1,5 +1,5 @@
-import { SubcategoriesForm } from '../_components/Form';
+import { SpecializationsForm } from '../_components/Form';
 
 export default function Details() {
-  return <SubcategoriesForm />;
+  return <SpecializationsForm />;
 }
