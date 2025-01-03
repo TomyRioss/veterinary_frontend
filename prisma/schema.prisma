@@ -45,15 +45,15 @@ model OrderDetail {
   Order       Order          @relation(fields: [orderId], references: [id])
 }
 
-model ProductCategory {
+model SubcategoryCategory {
   id              Int         @id @default(autoincrement())
-  productId       Int
-  categoryId      Int
+  subcategoryId   Int
+  categoryId      String
 
-  Subcategory Subcategory     @relation(fields: [productId], references: [id])
+  Subcategory Subcategory     @relation(fields: [subcategoryId], references: [id])
   Category    Category        @relation(fields: [categoryId], references: [id])
 
-  @@unique([productId, categoryId])
+  @@unique([subcategoryId, categoryId])
 }
 
 model Subcategory {
@@ -63,7 +63,7 @@ model Subcategory {
   createdAt             DateTime                 @default(now())  
   updatedAt             DateTime                 @updatedAt @default(now())
 
-  Categories            ProductCategory[]
+  Categories            SubcategoryCategory[]
   Product               Product[]
 }
 
@@ -120,14 +120,14 @@ model ProductVariationValue {
 }
 
 model Category {
-  id                    Int       @id @default(autoincrement())
+  id                    String       @id @default(uuid())
   name                  String    
   description           String?
   organizationId        Int       @default(1)
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt @default(now())
 
-  Products    ProductCategory[]
+  Products    SubcategoryCategory[]
 }
 
 model Owner {

@@ -9,13 +9,29 @@ async function getData() {
     select: {
       id: true,
       name: true,
+      Categories: {
+        select: {
+          Category: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
     orderBy: {
       updatedAt: 'desc',
     },
   });
 
-  return data;
+  // Transform the Categories property into a simple array of category names
+  const parsedData = data.map((subcategory) => ({
+    id: subcategory.id,
+    name: subcategory.name,
+    categories: subcategory.Categories.map((cat) => cat.Category.name),
+  }));
+
+  return parsedData;
 }
 
 export default async function AdminSubcategoriesIndex() {

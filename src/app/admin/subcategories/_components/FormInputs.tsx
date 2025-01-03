@@ -24,6 +24,7 @@ export function FormInputs({
       <div className="space-y-2">
         <Label htmlFor="categories">Categories</Label>
         <MultiSelect
+          name="categories"
           options={categories || []}
           onValueChange={setSelectedCategories}
           defaultValue={selectedCategories}
@@ -36,6 +37,7 @@ export function FormInputs({
           <p className="text-destructive text-sm">{error.categories}</p>
         )}
       </div>
+      <input type="hidden" name="categories" value={selectedCategories} />
     </div>
   );
 }
