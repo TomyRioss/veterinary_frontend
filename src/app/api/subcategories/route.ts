@@ -4,14 +4,25 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const specializations = await prisma.specialization.findMany();
+    const { searchParams } = new URL(request.url);
+    const categoryId = searchParams.get('categoryId');
+
+    const subcategories = await prisma.subcategory.findMany({
+      where: {
+        Categories: {
+          some: {
+            categoryId: categoryId || '',
+          },
+        },
+      },
+    });
 
     // Ensure that the response is always an array, even if the database returns null
-    return NextResponse.json(specializations || [], { status: 200 });
+    return NextResponse.json(subcategories || [], { status: 200 });
   } catch (error: any) {
-    console.log('Error fetching specializations:', error);
+    console.log('Error fetching subcategories:', error);
 
     const errorMessage =
       error instanceof Error ? error.message : 'Unknown error';

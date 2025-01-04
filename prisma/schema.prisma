@@ -77,6 +77,16 @@ model Brand {
   Products        Product[] // One-to-many relationship with products
 }
 
+model ProductImage {
+  id          String       @id @default(uuid())
+  productId   String
+  url         String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt @default(now())
+
+  Product     Product        @relation(fields: [productId], references: [id])
+}
+
 model Product {
   id                    String              @id @default(uuid())
   subcategoryId         Int
@@ -84,12 +94,13 @@ model Product {
   brandId               Int
   stock                 Int              @default(0)
   isAvailableForPurchase  Boolean          @default(true)
-  organizationId        Int
+  organizationId        Int              @default(1) 
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt @default(now())
 
   Subcategory           Subcategory               @relation(fields: [subcategoryId], references: [id])
   VariationValues       ProductVariationValue[]
+  Images                ProductImage[]
   Brand                 Brand                     @relation(fields: [brandId], references: [id])
   OrderDetail           OrderDetail[]
 }
@@ -155,10 +166,11 @@ model Breed {
   id          Int       @id @default(autoincrement())
   name        String    // e.g., "Retriever", "Persian", "Parrot"
   speciesId   Int       // Foreign key to Species
-  species     Species   @relation(fields: [speciesId], references: [id])
-  animals     Animal[]  // One type can have many animals
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt @default(now())
+
+  Species     Species   @relation(fields: [speciesId], references: [id])
+  animals     Animal[]  // One type can have many animals
 }
 
 model Specialization {
